@@ -18,6 +18,7 @@ import { ContentLoader } from "@/components/common/loader";
 import { SearchInput } from "./search";
 import TodoCard from "./todo-card";
 import { AddTodo } from "./add-todo";
+import { FilterTodo } from "./filter-todo";
 
 export default function Home() {
   const { data: todosData, isLoading, isStale } = useAllTodos();
@@ -39,12 +40,9 @@ export default function Home() {
 
   const [searchParams] = useSearchParams();
   const searchTitle = searchParams.get("title");
+  const filterValue = searchParams.get("filter");
 
   const isPending = !paginatedData || isLoading || isStale || !todosData;
-
-  // if (isPending) {
-  //   return <ContentLoader />;
-  // }
 
   const pageNumbers = getPageNumbers();
   const showStartEllipsis = pageNumbers[0] > 1;
@@ -53,6 +51,22 @@ export default function Home() {
   const filteredData = useMemo(() => {
     let result = paginatedData;
 
+    if (filterValue) {
+      if (filterValue === "complete") {
+        result = result.filter((data) => {
+          return data.completed === true;
+        });
+      } else if (filterValue === "incomplete") {
+        result = result.filter((data) => {
+          return data.completed === false;
+        });
+      } else {
+        result = result.filter(() => {
+          return result;
+        });
+      }
+    }
+
     if (searchTitle && searchTitle.length > 0) {
       result = result.filter((data) => {
         return data.title.includes(searchTitle);
@@ -60,7 +74,7 @@ export default function Home() {
     }
 
     return result;
-  }, [paginatedData, searchTitle]);
+  }, [paginatedData, searchTitle, filterValue]);
 
   return (
     <main className="border border-black min-h-[100vh] px-4 py-10">
@@ -75,7 +89,7 @@ export default function Home() {
 
       <Link
         to={`/oore`}
-        className="inline-block min-w-[80px] text-center text-[.8rem] p-3 rounded-[20px] bg-neon-navy text-mother-of-pearl"
+        className="inline-block min-w-[80px] text-center text-[.8rem] p-3  mt-4 rounded-[20px] bg-neon-navy text-mother-of-pearl"
       >
         Test Error Boundary
       </Link>
@@ -83,7 +97,10 @@ export default function Home() {
       <div className="w-full flex flex-col md:flex-row items-start md:items-center justify-between gap-3 flex-wrap">
         <SearchInput />
 
-        <AddTodo />
+        <div className="flex items-center justify-start gap-2">
+          <FilterTodo />
+          <AddTodo />
+        </div>
       </div>
 
       {isPending ? (

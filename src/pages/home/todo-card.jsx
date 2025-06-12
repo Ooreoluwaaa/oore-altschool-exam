@@ -52,7 +52,7 @@ export default function TodoCard(props) {
               todo.completed ? "bg-green-500" : "bg-blue-500"
             }`}
           >
-            {todo.completed ? "Completed" : "Pending"}
+            {todo.completed ? "Complete" : "Incomplete"}
           </Badge>
 
           <Link
