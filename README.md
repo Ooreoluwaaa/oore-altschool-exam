@@ -1,12 +1,74 @@
-# React + Vite
+# ALT-SCHOOL EXAM SUBMISSON
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## A SIMPLE TODOAPP THAT UTILIZES REACT AND MODERN LIBRARIES TO DISPLAY TODO TASKS WITH PAGINATION AND OTHER BASIS FUNCTIONALITIES
 
-Currently, two official plugins are available:
+## FEATURES
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Display of all todos
+- Deleting of a todo task
+- Updating a todo task
+= Display of a single todo on a page
+- Search for todos by title
+- Pagination of todo data
+- Filter by todo status
 
-## Expanding the ESLint configuration
+## INSTALLATION AND SETUP
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Vite was used in bootrapping the react-app
+
+```bash
+npm create vite@latest
+```
+
+- Tailwind installed
+
+```bash
+npm install tailwindcss @tailwindcss/vite
+```
+
+- Jsconfig file created at the root for absolute path feature. Usage:
+
+```bash
+import Button from '@/components/ui/button.jsx'
+```
+
+- Useful libraries installed with:
+
+```bash
+npm install <pkg>
+```
+
+## AVAILABLE SCRIPTS AND COMMAND
+
+- Run the app:
+
+```bash
+npm run dev
+```
+
+- Run local build
+
+```bash
+npm run build
+```
+
+## TECHNOLOGY STACK AND ARCHITECTURAL DECISIONS
+
+### TECHNOLOGY STACK
+
+- React
+- Tailwind
+- Shadcn
+- React Router
+- Tanstack React-Query
+- Lucide-react
+
+### ARCHITECTURAL DECISIONS
+
+- Pages folder for separation of containers to be displayed on the web
+- Assets folder for images
+- Custom hooks housed in hooks folder
+- Router setup in router folder
+- Tailwind for ease of styling
+- Shadcn and Reusabled components in components folder
+- Reusable components in components/common folder for components that are used often in all pages
