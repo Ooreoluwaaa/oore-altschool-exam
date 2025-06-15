@@ -72,3 +72,12 @@ npm run build
 - Tailwind for ease of styling
 - Shadcn and Reusabled components in components folder
 - Reusable components in components/common folder for components that are used often in all pages
+
+## SCREENSHOTS
+![image](./src/assets/screenshots/screenshot-1.png)
+![image](./src/assets/screenshots/screenshot-2.png)
+![image](./src/assets/screenshots/screenshot-3.png)
+![image](./src/assets/screenshots/screenshot-4.png)
+![image](./src/assets/screenshots/screenshot-5.png)
+![image](./src/assets/screenshots/screenshot-6.png)
+![image](./src/assets/screenshots/screenshot-7.png)
