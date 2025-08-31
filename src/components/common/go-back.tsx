@@ -1,7 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 
-export default function GoBackButton({ path }) {
+type Props = {
+  path?: string;
+};
+export default function GoBackButton({ path }: Props) {
   const navigate = useNavigate();
 
   return (

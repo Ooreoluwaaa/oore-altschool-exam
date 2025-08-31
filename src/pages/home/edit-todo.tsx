@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { toast } from "sonner";
 
 import { Edit } from "lucide-react";
@@ -18,8 +18,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import PrimaryButton from "@/components/common/primary-button";
+import { TodoType } from "@/types";
 
-export function EditTodo(props) {
+type Props = {
+  todo: TodoType;
+};
+
+export function EditTodo(props:Props) {
   const { todo } = props;
 
   const [formData, setFormData] = useState({
@@ -29,7 +34,7 @@ export function EditTodo(props) {
 
   const queryClient = useQueryClient();
 
-  function handleChange(e) {
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
@@ -48,8 +53,8 @@ export function EditTodo(props) {
         },
       });
 
-      await queryClient.invalidateQueries(["Todos", todo?.id]);
-      await queryClient.invalidateQueries(["Todos"]);
+      await queryClient.invalidateQueries({ queryKey: ["Todos", todo?.id] });
+      await queryClient.invalidateQueries({ queryKey: ["Todos"] });
 
       toast.success("Todo Updated");
     } catch (error) {
@@ -91,7 +96,7 @@ export function EditTodo(props) {
               <Checkbox
                 id="completed"
                 checked={formData.completed}
-                value={formData.completed}
+                value={String(formData.completed)}
                 onCheckedChange={() => {
                   setFormData((prev) => ({
                     ...prev,

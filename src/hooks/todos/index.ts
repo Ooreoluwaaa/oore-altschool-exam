@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { TodoType } from "@/types";
 
 export function useAllTodos() {
   return useQuery({
@@ -10,7 +11,7 @@ export function useAllTodos() {
       if (local_response) {
         const res = JSON.parse(local_response);
 
-        return res;
+        return res as TodoType[];
       }
 
       const res = await fetch("https://jsonplaceholder.typicode.com/todos");
@@ -19,13 +20,13 @@ export function useAllTodos() {
 
       localStorage.setItem(todos_key, JSON.stringify(result));
 
-      return result;
+      return result as TodoType[]
     },
     staleTime: 1000 * 60 * 60 + 10,
   });
 }
 
-export function useTodo(id) {
+export function useTodo(id:number) {
   return useQuery({
     queryKey: ["Todos", id],
     queryFn: async () => {
@@ -35,7 +36,7 @@ export function useTodo(id) {
       if (local_response) {
         const res = JSON.parse(local_response);
 
-        return res;
+        return res as TodoType;
       }
 
       const res = await fetch(
@@ -46,7 +47,7 @@ export function useTodo(id) {
 
       localStorage.setItem(todos_key, JSON.stringify(result));
 
-      return result;
+      return result as TodoType;
     },
     staleTime: 1000 * 60 * 60 + 10,
   });

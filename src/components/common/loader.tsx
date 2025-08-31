@@ -2,7 +2,12 @@ import { ScaleLoader } from "react-spinners";
 
 import { cn } from "@/lib/utils";
 
-export function ContentLoader({ className }) {
+type Props = {
+  className?: string;
+};
+
+export function ContentLoader(props: Props) {
+  const { className } = props;
   return (
     <div
       className={cn(
@@ -20,7 +25,8 @@ export function ContentLoader({ className }) {
   );
 }
 
-export function OverlayPageLoader({ className }) {
+export function OverlayPageLoader(props: Props) {
+  const { className } = props;
   return (
     <div
       className={cn(
@@ -38,7 +44,8 @@ export function OverlayPageLoader({ className }) {
   );
 }
 
-export function PageLoader({ className }) {
+export function PageLoader(props: Props) {
+  const { className } = props;
   return (
     <div
       className={cn(

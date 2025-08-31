@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
@@ -25,7 +24,7 @@ export default function SingleTodo() {
 
   const todoId = params.id;
 
-  const { data, isLoading } = useTodo(todoId);
+  const { data, isLoading } = useTodo(Number(todoId || 0));
 
   console.log(data);
 
@@ -34,12 +33,12 @@ export default function SingleTodo() {
   }
 
   async function handleDelete() {
-    await fetch(`https://jsonplaceholder.typicode.com/todos/${data.id}`, {
+    await fetch(`https://jsonplaceholder.typicode.com/todos/${data?.id}`, {
       method: "DELETE",
     });
 
-    await queryClient.invalidateQueries(["Todos", data?.id]);
-    await queryClient.invalidateQueries(["Todos"]);
+    await queryClient.invalidateQueries({ queryKey: ["Todos", data?.id] });
+    await queryClient.invalidateQueries({ queryKey: ["Todos"] });
 
     await navigate("/");
   }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { toast } from "sonner";
 
 import { Plus } from "lucide-react";
@@ -27,7 +27,7 @@ export function AddTodo() {
 
   const queryClient = useQueryClient();
 
-  function handleChange(e) {
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
@@ -46,7 +46,7 @@ export function AddTodo() {
         },
       });
 
-      await queryClient.invalidateQueries(["Todos"]);
+      await queryClient.invalidateQueries({ queryKey: ["Todos"] });
 
       toast.success("Todo Added");
     } catch (error) {
@@ -88,7 +88,7 @@ export function AddTodo() {
               <Checkbox
                 id="completed"
                 checked={formData.completed}
-                value={formData.completed}
+                value={String(formData.completed)}
                 onCheckedChange={() => {
                   setFormData((prev) => ({
                     ...prev,

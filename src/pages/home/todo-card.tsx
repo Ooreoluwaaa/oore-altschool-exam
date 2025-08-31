@@ -8,14 +8,19 @@ import { Badge } from "@/components/ui/badge";
 
 import { Button } from "@/components/ui/button";
 import { EditTodo } from "./edit-todo";
+import { TodoType } from "@/types";
 
-export default function TodoCard(props) {
+
+type Props = {
+  todo: TodoType;
+};
+export default function TodoCard(props:Props) {
   const { todo } = props;
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  async function handleDelete(id) {
+  async function handleDelete(id:number) {
     const todos_key = `@todos-${id}`;
     try {
       await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
@@ -25,8 +30,8 @@ export default function TodoCard(props) {
       localStorage.removeItem("@todos");
       localStorage.removeItem(todos_key);
 
-      await queryClient.invalidateQueries(["Todos", id]);
-      await queryClient.invalidateQueries(["Todos"]);
+      await queryClient.invalidateQueries({ queryKey: ["Todos", id] });
+      await queryClient.invalidateQueries({ queryKey: ["Todos"] });
 
       await navigate("/");
       toast.success("Todo Updated");

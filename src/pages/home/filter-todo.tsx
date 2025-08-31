@@ -20,7 +20,7 @@ export function FilterTodo() {
 
   const pathname = location.pathname;
 
-  function handleFilter(value) {
+  function handleFilter(value:string) {
     const params = new URLSearchParams(searchParams.toString());
 
     if (value && value.length > 0) {
@@ -48,7 +48,7 @@ export function FilterTodo() {
       </PopoverTrigger>
 
       <PopoverContent
-        align="left"
+        align="end"
         className="w-[150px] bg-neon-navy text-mother-of-pearl"
       >
         <div className="grid gap-4">

@@ -1,5 +1,6 @@
 import { Link, useSearchParams } from "react-router-dom";
-import { useMemo } from "react";
+import { useMemo } from "react"
+
 
 import {
   Pagination,
@@ -19,6 +20,7 @@ import { SearchInput } from "./search";
 import TodoCard from "./todo-card";
 import { AddTodo } from "./add-todo";
 import { FilterTodo } from "./filter-todo";
+import { TodoType } from "@/types";
 
 export default function Home() {
   const { data: todosData, isLoading, isStale } = useAllTodos();
@@ -33,7 +35,7 @@ export default function Home() {
     canGoToNextPage,
     canGoToPreviousPage,
     getPageNumbers,
-  } = usePagination({
+  } = usePagination<TodoType>({
     data: todosData,
     itemsPerPage: 10,
   });
@@ -49,6 +51,8 @@ export default function Home() {
   const showEndEllipsis = pageNumbers[pageNumbers.length - 1] < totalPages;
 
   const filteredData = useMemo(() => {
+    if (!paginatedData) return;
+    
     let result = paginatedData;
 
     if (filterValue) {
@@ -113,7 +117,7 @@ export default function Home() {
         <>
           {/* Data Display */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mt-10">
-            {filteredData.map((todo, index) => (
+            {filteredData?.map((todo, index) => (
               <TodoCard todo={todo} key={index} />
             ))}
           </div>

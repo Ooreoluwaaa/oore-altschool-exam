@@ -1,7 +1,14 @@
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 
-export default function PrimaryButton(props) {
+type Props = {
+  className?: string;
+  children: ReactNode;
+  onClick?: () => void;
+};
+
+export default function PrimaryButton(props:Props) {
   const { className, children, onClick } = props;
 
   return (
