@@ -1,12 +1,8 @@
 "use client"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
 import { deleteTodo, updateTodo } from "@/lib/api"
 import { EditTodoDialog } from "./edit-todo-dialog"
-import { Trash2, Edit2 } from 'lucide-react'
 
 interface TodoCardProps {
   todo: {
@@ -15,12 +11,14 @@ interface TodoCardProps {
     completed: boolean
     userId: number
   }
+  index: number
   onTodoDeleted: () => void
   onTodoUpdated: () => void
 }
 
 export function TodoCard({
   todo,
+  index,
   onTodoDeleted,
   onTodoUpdated,
 }: TodoCardProps) {
@@ -45,7 +43,6 @@ export function TodoCard({
 
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this todo?")) return
-
     setLoading(true)
     try {
       await deleteTodo(todo.id)
@@ -61,57 +58,62 @@ export function TodoCard({
 
   return (
     <>
-      <Card className="hover:shadow-md transition-shadow">
-        <CardHeader className="pb-3">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex items-start gap-3 flex-1">
-              <Checkbox
-                checked={todo.completed}
-                onCheckedChange={handleToggle}
-                disabled={loading}
-                className="mt-1"
-              />
-              <CardTitle
-                className={`text-base ${
-                  todo.completed
-                    ? "line-through text-muted-foreground"
-                    : ""
-                }`}
-              >
-                {todo.title}
-              </CardTitle>
-            </div>
-            <div className="flex gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setEditOpen(true)}
-                disabled={loading}
-              >
-                <Edit2 className="w-4 h-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleDelete}
-                disabled={loading}
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
-            </div>
+      <div className="bg-slate-900 rounded-lg p-6 flex flex-col justify-between h-full hover:shadow-lg transition-shadow">
+        {/* Header */}
+        <div>
+          <h3 className="text-white font-semibold mb-4 line-clamp-2">{todo.title}</h3>
+        </div>
+
+        {/* Number and Status */}
+        <div className="flex items-center justify-between mb-6">
+          <span className="text-5xl font-bold text-white opacity-20">{index}</span>
+          <div className="flex gap-2">
+            <span
+              className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${
+                todo.completed
+                  ? "bg-green-500"
+                  : "bg-blue-500"
+              }`}
+            >
+              {todo.completed ? "Complete" : "Incomplete"}
+            </span>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-gray-400 hover:text-white"
+            >
+              👁️
+            </Button>
           </div>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">
-            ID: {todo.id} • User: {todo.userId}
-          </p>
-        </CardContent>
-      </Card>
+        </div>
+
+        {/* Actions */}
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setEditOpen(true)}
+            disabled={loading}
+            className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
+          >
+            ✏️ Edit
+          </Button>
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={handleDelete}
+            disabled={loading}
+            className="flex-1 bg-red-600 hover:bg-red-700"
+          >
+            🗑️ Delete
+          </Button>
+        </div>
+      </div>
 
       <EditTodoDialog
+        todo={todo}
         open={editOpen}
         onOpenChange={setEditOpen}
-        todo={todo}
         onTodoUpdated={onTodoUpdated}
       />
     </>

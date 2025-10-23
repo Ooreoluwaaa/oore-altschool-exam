@@ -1,57 +1,60 @@
 "use client"
-
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Search } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 interface TodoFiltersProps {
-  searchTerm: string
-  onSearchChange: (value: string) => void
   statusFilter: "all" | "completed" | "pending"
   onStatusFilterChange: (status: "all" | "completed" | "pending") => void
 }
 
 export default function TodoFilters({
-  searchTerm,
-  onSearchChange,
   statusFilter,
   onStatusFilterChange,
 }: TodoFiltersProps) {
   return (
-    <div className="space-y-4">
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-        <Input
-          placeholder="Search todos by title..."
-          value={searchTerm}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className="pl-10"
-        />
-      </div>
-
-      <div className="flex gap-2 flex-wrap">
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         <Button
-          variant={statusFilter === "all" ? "default" : "outline"}
+          variant="outline"
+          className="gap-2 border-gray-300 text-gray-700 hover:bg-gray-100"
+        >
+          ⚙️ Filter
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem
           onClick={() => onStatusFilterChange("all")}
-          size="sm"
+          className={statusFilter === "all" ? "bg-blue-50" : ""}
         >
-          All
-        </Button>
-        <Button
-          variant={statusFilter === "pending" ? "default" : "outline"}
-          onClick={() => onStatusFilterChange("pending")}
-          size="sm"
-        >
-          Pending
-        </Button>
-        <Button
-          variant={statusFilter === "completed" ? "default" : "outline"}
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full border-2 border-gray-400" />
+            All
+          </div>
+        </DropdownMenuItem>
+        <DropdownMenuItem
           onClick={() => onStatusFilterChange("completed")}
-          size="sm"
+          className={statusFilter === "completed" ? "bg-blue-50" : ""}
         >
-          Completed
-        </Button>
-      </div>
-    </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full border-2 border-green-500 bg-green-500" />
+            Complete
+          </div>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => onStatusFilterChange("pending")}
+          className={statusFilter === "pending" ? "bg-blue-50" : ""}
+        >
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full border-2 border-blue-500 bg-blue-500" />
+            Incomplete
+          </div>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

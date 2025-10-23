@@ -1,7 +1,5 @@
 "use client"
-
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight } from "lucide-react"
 
 interface TodoPaginationProps {
   currentPage: number
@@ -9,30 +7,35 @@ interface TodoPaginationProps {
   onPageChange: (page: number) => void
 }
 
-export default function TodoPagination({ currentPage, totalPages, onPageChange }: TodoPaginationProps) {
-  if (totalPages <= 1) return null
-
+export default function TodoPagination({
+  currentPage,
+  totalPages,
+  onPageChange,
+}: TodoPaginationProps) {
   return (
-    <div className="flex items-center justify-center gap-2 mt-8">
+    <div className="flex items-center justify-center gap-2">
       <Button
         variant="outline"
         size="sm"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="gap-2"
+        className="border-gray-300"
       >
-        <ChevronLeft className="w-4 h-4" />
-        Previous
+        ← Previous
       </Button>
 
-      <div className="flex items-center gap-1">
+      <div className="flex gap-1">
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
           <Button
             key={page}
             variant={currentPage === page ? "default" : "outline"}
             size="sm"
             onClick={() => onPageChange(page)}
-            className="w-10"
+            className={
+              currentPage === page
+                ? "bg-blue-600 hover:bg-blue-700"
+                : "border-gray-300"
+            }
           >
             {page}
           </Button>
@@ -44,10 +47,9 @@ export default function TodoPagination({ currentPage, totalPages, onPageChange }
         size="sm"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="gap-2"
+        className="border-gray-300"
       >
-        Next
-        <ChevronRight className="w-4 h-4" />
+        Next →
       </Button>
     </div>
   )

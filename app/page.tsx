@@ -1,5 +1,4 @@
 "use client"
-
 import { useState, useMemo } from "react"
 import { useDebouncedValue } from "@/hooks/use-debounce"
 import { useTodos } from "@/hooks/use-todos"
@@ -7,8 +6,8 @@ import TodoList from "@/components/todo-list"
 import TodoFilters from "@/components/todo-filters"
 import TodoPagination from "@/components/todo-pagination"
 import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
-import CreateTodoDialog from "@/components/create-todo-dialog"
+import { CreateTodoDialog } from "@/components/create-todo-dialog"
+import { Input } from "@/components/ui/input"
 
 const ITEMS_PER_PAGE = 10
 
@@ -29,7 +28,6 @@ export default function Home() {
         statusFilter === "all" ||
         (statusFilter === "completed" && todo.completed) ||
         (statusFilter === "pending" && !todo.completed)
-
       return matchesSearch && matchesStatus
     })
   }, [todos, debouncedSearchTerm, statusFilter])
@@ -56,42 +54,56 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
+    <main className="min-h-screen bg-amber-50 p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-4xl font-bold text-foreground mb-2">My Todos</h1>
-              <p className="text-muted-foreground">Manage your tasks efficiently with search, filter, and pagination</p>
-            </div>
-            <Button onClick={() => setIsCreateDialogOpen(true)} className="gap-2">
-              <Plus className="w-4 h-4" />
-              New Todo
-            </Button>
-          </div>
-
-          <TodoFilters
-            searchTerm={searchTerm}
-            onSearchChange={handleSearchChange}
-            statusFilter={statusFilter}
-            onStatusFilterChange={handleStatusFilterChange}
-          />
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">TODO APP</h1>
+          <p className="text-gray-600">
+            Showing {paginatedTodos.length} of {filteredTodos.length} tasks (Page {currentPage} of {totalPages || 1})
+          </p>
         </div>
 
-        {isLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="text-center">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-              <p className="mt-4 text-muted-foreground">Loading todos...</p>
+        {/* Search and Filter Bar */}
+        <div className="flex gap-4 mb-8 items-center justify-between flex-wrap">
+          <div className="flex-1 min-w-64">
+            <div className="relative">
+              <span className="absolute left-3 top-3 text-gray-400">🔍</span>
+              <Input
+                placeholder="Search todos..."
+                value={searchTerm}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                className="pl-10 bg-white border-gray-300"
+              />
             </div>
           </div>
+
+          <div className="flex gap-3">
+            <TodoFilters
+              statusFilter={statusFilter}
+              onStatusFilterChange={handleStatusFilterChange}
+            />
+            <Button
+              onClick={() => setIsCreateDialogOpen(true)}
+              className="gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              ➕ Add Todo
+            </Button>
+          </div>
+        </div>
+
+        {/* Content */}
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <p className="text-gray-600">Loading todos...</p>
+          </div>
         ) : error ? (
-          <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 text-destructive">
-            <p>Error loading todos. Please try again.</p>
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+            Error loading todos. Please try again.
           </div>
         ) : paginatedTodos.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-muted-foreground text-lg">
+            <p className="text-gray-600 mb-4">
               {filteredTodos.length === 0 && todos.length > 0
                 ? "No todos match your filters"
                 : "No todos yet. Create one to get started!"}
@@ -100,12 +112,26 @@ export default function Home() {
         ) : (
           <>
             <TodoList todos={paginatedTodos} onTodoUpdated={refetch} />
-            <TodoPagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
           </>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-8">
+            <TodoPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
         )}
       </div>
 
-      <CreateTodoDialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen} onTodoCreated={refetch} />
+      <CreateTodoDialog
+        open={isCreateDialogOpen}
+        onOpenChange={setIsCreateDialogOpen}
+        onTodoCreated={refetch}
+      />
     </main>
   )
 }
