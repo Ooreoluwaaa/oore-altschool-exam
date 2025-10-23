@@ -1,32 +1,21 @@
 "use client"
 import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 interface TodoFiltersProps {
   statusFilter: "all" | "completed" | "pending"
   onStatusFilterChange: (status: "all" | "completed" | "pending") => void
 }
 
-export function TodoFilters({
-  statusFilter,
-  onStatusFilterChange,
-}: TodoFiltersProps) {
+export function TodoFilters({ statusFilter, onStatusFilterChange }: TodoFiltersProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          className="gap-2 bg-slate-900 text-white hover:bg-slate-800 border-slate-700"
-        >
+        <Button className="gap-2 bg-slate-900 text-white border border-slate-700 px-4 py-2 rounded-md font-sans font-medium hover:bg-slate-800">
           🔽 Filter
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
+      <DropdownMenuContent align="end" className="w-48 z-50">
         <DropdownMenuItem
           onClick={() => onStatusFilterChange("all")}
           className={statusFilter === "all" ? "bg-blue-100" : ""}
@@ -34,9 +23,7 @@ export function TodoFilters({
           <div className="flex items-center gap-2">
             <div
               className={`w-4 h-4 rounded-full border-2 ${
-                statusFilter === "all"
-                  ? "border-blue-600 bg-blue-600"
-                  : "border-gray-300"
+                statusFilter === "all" ? "border-blue-600 bg-blue-600" : "border-gray-300"
               }`}
             />
             All
@@ -49,9 +36,7 @@ export function TodoFilters({
           <div className="flex items-center gap-2">
             <div
               className={`w-4 h-4 rounded-full border-2 ${
-                statusFilter === "completed"
-                  ? "border-blue-600 bg-blue-600"
-                  : "border-gray-300"
+                statusFilter === "completed" ? "border-blue-600 bg-blue-600" : "border-gray-300"
               }`}
             />
             Complete
@@ -64,9 +49,7 @@ export function TodoFilters({
           <div className="flex items-center gap-2">
             <div
               className={`w-4 h-4 rounded-full border-2 ${
-                statusFilter === "pending"
-                  ? "border-blue-600 bg-blue-600"
-                  : "border-gray-300"
+                statusFilter === "pending" ? "border-blue-600 bg-blue-600" : "border-gray-300"
               }`}
             />
             Incomplete

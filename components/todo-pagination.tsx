@@ -7,16 +7,12 @@ interface TodoPaginationProps {
   onPageChange: (page: number) => void
 }
 
-export function TodoPagination({
-  currentPage,
-  totalPages,
-  onPageChange,
-}: TodoPaginationProps) {
+export function TodoPagination({ currentPage, totalPages, onPageChange }: TodoPaginationProps) {
   const pages = []
   const maxPagesToShow = 5
 
   let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2))
-  let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1)
+  const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1)
 
   if (endPage - startPage + 1 < maxPagesToShow) {
     startPage = Math.max(1, endPage - maxPagesToShow + 1)
@@ -28,30 +24,16 @@ export function TodoPagination({
 
   return (
     <div className="flex items-center justify-center gap-2 flex-wrap">
-      <Button
-        onClick={() => onPageChange(1)}
-        disabled={currentPage === 1}
-        variant="outline"
-        size="sm"
-      >
+      <Button onClick={() => onPageChange(1)} disabled={currentPage === 1} variant="outline" size="sm">
         First
       </Button>
-      <Button
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        variant="outline"
-        size="sm"
-      >
+      <Button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1} variant="outline" size="sm">
         Previous
       </Button>
 
       {startPage > 1 && (
         <>
-          <Button
-            onClick={() => onPageChange(1)}
-            variant="outline"
-            size="sm"
-          >
+          <Button onClick={() => onPageChange(1)} variant="outline" size="sm">
             1
           </Button>
           {startPage > 2 && <span className="px-2">...</span>}
@@ -64,11 +46,7 @@ export function TodoPagination({
           onClick={() => onPageChange(page)}
           variant={currentPage === page ? "default" : "outline"}
           size="sm"
-          className={
-            currentPage === page
-              ? "bg-blue-600 hover:bg-blue-700 text-white"
-              : ""
-          }
+          className={currentPage === page ? "bg-blue-600 hover:bg-blue-700 text-white" : ""}
         >
           {page}
         </Button>
@@ -77,11 +55,7 @@ export function TodoPagination({
       {endPage < totalPages && (
         <>
           {endPage < totalPages - 1 && <span className="px-2">...</span>}
-          <Button
-            onClick={() => onPageChange(totalPages)}
-            variant="outline"
-            size="sm"
-          >
+          <Button onClick={() => onPageChange(totalPages)} variant="outline" size="sm">
             {totalPages}
           </Button>
         </>

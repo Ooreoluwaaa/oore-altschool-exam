@@ -1,103 +1,92 @@
 "use client"
 
-import { useParams, useRouter } from "next/navigation"
-import { useTodos } from "@/hooks/use-todos"
+import { useState, useEffect } from "react"
+import { useParams, useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { ArrowLeft, Edit2 } from "lucide-react"
-import { useState } from "react"
-import EditTodoDialog from "@/components/edit-todo-dialog"
+import { Badge } from "@/components/ui/badge"
+import { useTodos } from "@/hooks/use-todos"
 
 export default function TodoDetailPage() {
   const params = useParams()
   const router = useRouter()
-  const todoId = params.id as string
   const { todos, isLoading } = useTodos()
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [todo, setTodo] = useState<any>(null)
 
-  const todo = todos.find((t) => t.id === Number.parseInt(todoId))
+  useEffect(() => {
+    if (todos.length > 0) {
+      const foundTodo = todos.find((t) => t.id === Number(params.id))
+      setTodo(foundTodo)
+    }
+  }, [todos, params.id])
 
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-center py-12">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          </div>
-        </div>
-      </main>
+      <div className="min-h-screen bg-amber-50 p-8 flex items-center justify-center">
+        <p className="text-gray-600">Loading todo...</p>
+      </div>
     )
   }
 
   if (!todo) {
     return (
-      <main className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
-          <Button variant="ghost" onClick={() => router.back()} className="mb-6 gap-2">
-            <ArrowLeft className="w-4 h-4" />
-            Back
+      <div className="min-h-screen bg-amber-50 p-8 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">Todo not found</p>
+          <Button onClick={() => router.push("/")} className="bg-blue-600 hover:bg-blue-700 text-white">
+            Back to Todos
           </Button>
-          <Card className="p-8 text-center">
-            <p className="text-muted-foreground text-lg">Todo not found</p>
-          </Card>
         </div>
-      </main>
+      </div>
     )
   }
 
   return (
-    <main className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <Button variant="ghost" onClick={() => router.back()} className="mb-6 gap-2">
-          <ArrowLeft className="w-4 h-4" />
-          Back
+    <main className="min-h-screen bg-amber-50 p-8 font-sans">
+      <div className="max-w-2xl mx-auto">
+        <Button onClick={() => router.push("/")} variant="outline" className="mb-6">
+          ← Back to Todos
         </Button>
 
-        <Card className="p-8">
+        <div className="bg-white rounded-lg shadow-lg p-8">
           <div className="flex items-start justify-between mb-6">
-            <div className="flex-1">
-              <h1 className="text-3xl font-bold text-foreground mb-2">{todo.title}</h1>
-              <div className="flex items-center gap-4">
-                <span
-                  className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    todo.completed
-                      ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
-                      : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100"
-                  }`}
-                >
-                  {todo.completed ? "Completed" : "Pending"}
-                </span>
-                <span className="text-sm text-muted-foreground">ID: {todo.id}</span>
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">{todo.title}</h1>
+              <p className="text-gray-600">ID: {todo.id}</p>
+            </div>
+            <Badge
+              className={`${
+                todo.completed ? "bg-green-500 hover:bg-green-600" : "bg-blue-500 hover:bg-blue-600"
+              } text-white`}
+            >
+              {todo.completed ? "Complete" : "Incomplete"}
+            </Badge>
+          </div>
+
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">Description</h2>
+              <p className="text-gray-600">{todo.description}</p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Status</h3>
+                <p className="text-gray-900">{todo.completed ? "Completed" : "Pending"}</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Created</h3>
+                <p className="text-gray-900">{new Date(todo.createdAt).toLocaleDateString()}</p>
               </div>
             </div>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={() => setIsEditDialogOpen(true)} className="gap-2">
-                <Edit2 className="w-4 h-4" />
-                Edit
-              </Button>
-            </div>
           </div>
 
-          {todo.description && (
-            <div className="mt-6 p-4 bg-muted rounded-lg">
-              <h2 className="font-semibold text-foreground mb-2">Description</h2>
-              <p className="text-foreground/80">{todo.description}</p>
-            </div>
-          )}
-
-          <div className="mt-6 grid grid-cols-2 gap-4">
-            <div className="p-4 bg-muted rounded-lg">
-              <p className="text-sm text-muted-foreground mb-1">User ID</p>
-              <p className="text-lg font-semibold text-foreground">{todo.userId}</p>
-            </div>
-            <div className="p-4 bg-muted rounded-lg">
-              <p className="text-sm text-muted-foreground mb-1">Status</p>
-              <p className="text-lg font-semibold text-foreground">{todo.completed ? "Completed" : "Pending"}</p>
-            </div>
+          <div className="flex gap-3 mt-8">
+            <Button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">✏️ Edit Todo</Button>
+            <Button variant="destructive" className="flex-1 bg-red-600 hover:bg-red-700 text-white">
+              🗑️ Delete Todo
+            </Button>
           </div>
-        </Card>
-
-        <EditTodoDialog todo={todo} open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen} />
+        </div>
       </div>
     </main>
   )

@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect } from "react"
 
 export interface Todo {
@@ -13,7 +15,6 @@ export function useTodos() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Generate mock todos
   const generateMockTodos = () => {
     const mockTitles = [
       "Delectus Aut Autem",
@@ -43,7 +44,6 @@ export function useTodos() {
 
   useEffect(() => {
     setIsLoading(true)
-    // Simulate API call
     const timer = setTimeout(() => {
       setTodos(generateMockTodos())
       setIsLoading(false)

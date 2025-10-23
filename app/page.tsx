@@ -2,11 +2,11 @@
 import { useState, useMemo } from "react"
 import { useDebouncedValue } from "@/hooks/use-debounce"
 import { useTodos } from "@/hooks/use-todos"
-import TodoList from "@/components/todo-list"
-import TodoFilters from "@/components/todo-filters"
-import TodoPagination from "@/components/todo-pagination"
-import { Button } from "@/components/ui/button"
+import { TodoList } from "@/components/todo-list"
+import { TodoFilters } from "@/components/todo-filters"
+import { TodoPagination } from "@/components/todo-pagination"
 import { CreateTodoDialog } from "@/components/create-todo-dialog"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 const ITEMS_PER_PAGE = 10
@@ -20,7 +20,6 @@ export default function Home() {
   const debouncedSearchTerm = useDebouncedValue(searchTerm, 300)
   const { todos, isLoading, error, refetch } = useTodos()
 
-  // Filter and search todos
   const filteredTodos = useMemo(() => {
     return todos.filter((todo) => {
       const matchesSearch = todo.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
@@ -32,7 +31,6 @@ export default function Home() {
     })
   }, [todos, debouncedSearchTerm, statusFilter])
 
-  // Paginate todos
   const totalPages = Math.ceil(filteredTodos.length / ITEMS_PER_PAGE)
   const paginatedTodos = useMemo(() => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
@@ -41,6 +39,7 @@ export default function Home() {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   const handleSearchChange = (value: string) => {
@@ -53,13 +52,24 @@ export default function Home() {
     setCurrentPage(1)
   }
 
+  const handleTestError = () => {
+    throw new Error("Test error boundary")
+  }
+
   return (
-    <main className="min-h-screen bg-amber-50 p-8">
+    <main className="min-h-screen bg-amber-50 p-8 font-sans">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">TODO APP</h1>
-          <p className="text-gray-600">
+        <div className="mb-8 text-center relative">
+          <Button
+            onClick={handleTestError}
+            variant="outline"
+            size="sm"
+            className="absolute left-0 top-0 text-xs bg-slate-900 text-white hover:bg-slate-800"
+          >
+            Test Error Boundary
+          </Button>
+          <h1 className="text-5xl font-bold text-gray-900 mb-2 tracking-tight">TODO APP</h1>
+          <p className="text-gray-600 text-sm">
             Showing {paginatedTodos.length} of {filteredTodos.length} tasks (Page {currentPage} of {totalPages || 1})
           </p>
         </div>
@@ -70,24 +80,21 @@ export default function Home() {
             <div className="relative">
               <span className="absolute left-3 top-3 text-gray-400">🔍</span>
               <Input
-                placeholder="Search todos..."
+                placeholder="Search Address..."
                 value={searchTerm}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="pl-10 bg-white border-gray-300"
+                className="pl-10 bg-white border-gray-300 font-sans"
               />
             </div>
           </div>
 
           <div className="flex gap-3">
-            <TodoFilters
-              statusFilter={statusFilter}
-              onStatusFilterChange={handleStatusFilterChange}
-            />
+            <TodoFilters statusFilter={statusFilter} onStatusFilterChange={handleStatusFilterChange} />
             <Button
               onClick={() => setIsCreateDialogOpen(true)}
-              className="gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+              className="gap-2 bg-slate-900 hover:bg-slate-800 text-white font-sans"
             >
-              ➕ Add Todo
+              + Add Todo
             </Button>
           </div>
         </div>
@@ -118,20 +125,12 @@ export default function Home() {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="mt-8">
-            <TodoPagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
+            <TodoPagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
           </div>
         )}
       </div>
 
-      <CreateTodoDialog
-        open={isCreateDialogOpen}
-        onOpenChange={setIsCreateDialogOpen}
-        onTodoCreated={refetch}
-      />
+      <CreateTodoDialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen} onTodoCreated={refetch} />
     </main>
   )
 }
