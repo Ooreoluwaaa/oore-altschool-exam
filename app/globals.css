@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply border-gray-200 outline-blue-500/50;
+}
+
+body {
+  @apply bg-white text-gray-900;
+}
+
+.dark {
+  @apply bg-gray-950 text-gray-50;
+}
+
+.dark * {
+  @apply border-gray-800;
+}
