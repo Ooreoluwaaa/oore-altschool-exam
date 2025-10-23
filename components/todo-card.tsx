@@ -1,121 +1,60 @@
 "use client"
-import { useState } from "react"
+import { Todo } from "@/hooks/use-todos"
 import { Button } from "@/components/ui/button"
-import { deleteTodo, updateTodo } from "@/lib/api"
-import { EditTodoDialog } from "./edit-todo-dialog"
+import { Badge } from "@/components/ui/badge"
 
 interface TodoCardProps {
-  todo: {
-    id: number
-    title: string
-    completed: boolean
-    userId: number
-  }
+  todo: Todo
   index: number
-  onTodoDeleted: () => void
   onTodoUpdated: () => void
 }
 
-export function TodoCard({
-  todo,
-  index,
-  onTodoDeleted,
-  onTodoUpdated,
-}: TodoCardProps) {
-  const [loading, setLoading] = useState(false)
-  const [editOpen, setEditOpen] = useState(false)
-
-  const handleToggle = async () => {
-    setLoading(true)
-    try {
-      await updateTodo(todo.id, {
-        title: todo.title,
-        completed: !todo.completed,
-      })
-      onTodoUpdated()
-    } catch (error) {
-      alert("Failed to update todo")
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this todo?")) return
-    setLoading(true)
-    try {
-      await deleteTodo(todo.id)
-      alert("Todo deleted successfully!")
-      onTodoDeleted()
-    } catch (error) {
-      alert("Failed to delete todo")
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
+export function TodoCard({ todo, index, onTodoUpdated }: TodoCardProps) {
   return (
-    <>
-      <div className="bg-slate-900 rounded-lg p-6 flex flex-col justify-between h-full hover:shadow-lg transition-shadow">
-        {/* Header */}
-        <div>
-          <h3 className="text-white font-semibold mb-4 line-clamp-2">{todo.title}</h3>
-        </div>
+    <div className="bg-slate-900 rounded-lg p-6 text-white flex flex-col h-full">
+      {/* Title */}
+      <h3 className="text-lg font-semibold mb-4 line-clamp-2">{todo.title}</h3>
 
-        {/* Number and Status */}
-        <div className="flex items-center justify-between mb-6">
-          <span className="text-5xl font-bold text-white opacity-20">{index}</span>
-          <div className="flex gap-2">
-            <span
-              className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${
-                todo.completed
-                  ? "bg-green-500"
-                  : "bg-blue-500"
-              }`}
-            >
-              {todo.completed ? "Complete" : "Incomplete"}
-            </span>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-gray-400 hover:text-white"
-            >
-              👁️
-            </Button>
-          </div>
-        </div>
+      {/* Number */}
+      <div className="text-5xl font-bold mb-4 opacity-30">{index}</div>
 
-        {/* Actions */}
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setEditOpen(true)}
-            disabled={loading}
-            className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
-          >
-            ✏️ Edit
-          </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={handleDelete}
-            disabled={loading}
-            className="flex-1 bg-red-600 hover:bg-red-700"
-          >
-            🗑️ Delete
-          </Button>
-        </div>
+      {/* Status Badge and View Button */}
+      <div className="flex items-center justify-between mb-4 mt-auto">
+        <Badge
+          className={`${
+            todo.completed
+              ? "bg-green-500 hover:bg-green-600"
+              : "bg-blue-500 hover:bg-blue-600"
+          } text-white`}
+        >
+          {todo.completed ? "Complete" : "Incomplete"}
+        </Badge>
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-xs bg-white text-slate-900 hover:bg-gray-100"
+        >
+          View Todo
+        </Button>
       </div>
 
-      <EditTodoDialog
-        todo={todo}
-        open={editOpen}
-        onOpenChange={setEditOpen}
-        onTodoUpdated={onTodoUpdated}
-      />
-    </>
+      {/* Edit and Delete Buttons */}
+      <div className="flex gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          className="flex-1 bg-white text-slate-900 hover:bg-gray-100"
+        >
+          ✏️ Edit
+        </Button>
+        <Button
+          variant="destructive"
+          size="sm"
+          className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+        >
+          🗑️ Delete
+        </Button>
+      </div>
+    </div>
   )
 }

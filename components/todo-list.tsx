@@ -1,5 +1,5 @@
 "use client"
-import type { Todo } from "@/types/todo"
+import { Todo } from "@/hooks/use-todos"
 import { TodoCard } from "./todo-card"
 
 interface TodoListProps {
@@ -7,7 +7,7 @@ interface TodoListProps {
   onTodoUpdated: () => void
 }
 
-export default function TodoList({ todos, onTodoUpdated }: TodoListProps) {
+export function TodoList({ todos, onTodoUpdated }: TodoListProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {todos.map((todo, index) => (
@@ -15,7 +15,6 @@ export default function TodoList({ todos, onTodoUpdated }: TodoListProps) {
           key={todo.id}
           todo={todo}
           index={index + 1}
-          onTodoDeleted={onTodoUpdated}
           onTodoUpdated={onTodoUpdated}
         />
       ))}

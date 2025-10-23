@@ -1,18 +1,15 @@
 "use client"
-
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogFooter,
 } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { createTodo } from "@/lib/api"
 
 interface CreateTodoDialogProps {
   open: boolean
@@ -26,58 +23,62 @@ export function CreateTodoDialog({
   onTodoCreated,
 }: CreateTodoDialogProps) {
   const [title, setTitle] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [description, setDescription] = useState("")
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!title.trim()) {
-      alert("Please enter a todo title")
-      return
-    }
-
-    setLoading(true)
-    try {
-      await createTodo(title)
-      alert("Todo created successfully!")
+  const handleCreate = () => {
+    if (title.trim()) {
+      // Here you would typically make an API call to create the todo
+      console.log("Creating todo:", { title, description })
       setTitle("")
+      setDescription("")
       onOpenChange(false)
       onTodoCreated()
-    } catch (error) {
-      alert("Failed to create todo")
-      console.error(error)
-    } finally {
-      setLoading(false)
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        <Button>Create Todo</Button>
-      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create New Todo</DialogTitle>
           <DialogDescription>
-            Add a new todo to your list
+            Add a new task to your todo list
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="title">Todo Title</Label>
+        <div className="space-y-4">
+          <div>
+            <label className="text-sm font-medium">Title</label>
             <Input
-              id="title"
               placeholder="Enter todo title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              disabled={loading}
+              className="mt-1"
             />
           </div>
-          <Button type="submit" disabled={loading} className="w-full">
-            {loading ? "Creating..." : "Create Todo"}
+          <div>
+            <label className="text-sm font-medium">Description</label>
+            <Input
+              placeholder="Enter todo description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="mt-1"
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+          >
+            Cancel
           </Button>
-        </form>
+          <Button
+            onClick={handleCreate}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
+            Create Todo
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )

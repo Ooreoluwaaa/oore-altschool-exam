@@ -12,7 +12,7 @@ interface TodoFiltersProps {
   onStatusFilterChange: (status: "all" | "completed" | "pending") => void
 }
 
-export default function TodoFilters({
+export function TodoFilters({
   statusFilter,
   onStatusFilterChange,
 }: TodoFiltersProps) {
@@ -21,36 +21,54 @@ export default function TodoFilters({
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="gap-2 border-gray-300 text-gray-700 hover:bg-gray-100"
+          className="gap-2 bg-slate-900 text-white hover:bg-slate-800 border-slate-700"
         >
-          ⚙️ Filter
+          🔽 Filter
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuItem
           onClick={() => onStatusFilterChange("all")}
-          className={statusFilter === "all" ? "bg-blue-50" : ""}
+          className={statusFilter === "all" ? "bg-blue-100" : ""}
         >
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full border-2 border-gray-400" />
+            <div
+              className={`w-4 h-4 rounded-full border-2 ${
+                statusFilter === "all"
+                  ? "border-blue-600 bg-blue-600"
+                  : "border-gray-300"
+              }`}
+            />
             All
           </div>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => onStatusFilterChange("completed")}
-          className={statusFilter === "completed" ? "bg-blue-50" : ""}
+          className={statusFilter === "completed" ? "bg-blue-100" : ""}
         >
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full border-2 border-green-500 bg-green-500" />
+            <div
+              className={`w-4 h-4 rounded-full border-2 ${
+                statusFilter === "completed"
+                  ? "border-blue-600 bg-blue-600"
+                  : "border-gray-300"
+              }`}
+            />
             Complete
           </div>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => onStatusFilterChange("pending")}
-          className={statusFilter === "pending" ? "bg-blue-50" : ""}
+          className={statusFilter === "pending" ? "bg-blue-100" : ""}
         >
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full border-2 border-blue-500 bg-blue-500" />
+            <div
+              className={`w-4 h-4 rounded-full border-2 ${
+                statusFilter === "pending"
+                  ? "border-blue-600 bg-blue-600"
+                  : "border-gray-300"
+              }`}
+            />
             Incomplete
           </div>
         </DropdownMenuItem>
