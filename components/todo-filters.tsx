@@ -15,7 +15,7 @@ export function TodoFilters({ statusFilter, onStatusFilterChange }: TodoFiltersP
           🔽 Filter
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48 z-50">
+      <DropdownMenuContent align="end" className="w-48 z-50 bg-slate-800 text-white">
         <DropdownMenuItem
           onClick={() => onStatusFilterChange("all")}
           className={statusFilter === "all" ? "bg-blue-100" : ""}

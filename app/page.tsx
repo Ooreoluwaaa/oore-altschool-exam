@@ -64,7 +64,7 @@ export default function Home() {
             onClick={handleTestError}
             variant="outline"
             size="sm"
-            className="absolute left-0 top-0 text-xs bg-slate-900 text-white hover:bg-slate-800"
+            className="absolute left-0 top-0 text-xs bg-slate-800 text-white hover:bg-slate-800"
           >
             Test Error Boundary
           </Button>

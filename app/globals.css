@@ -3,6 +3,8 @@
 @tailwind utilities;
 
 @theme inline {
+  --color-neon-navy: #16243d;
+  --color-mother-of-pearl: #e9dccb;
   --color-background: #faf5f0;
   --color-foreground: #1f2937;
   --color-primary: #2563eb;
